@@ -36,7 +36,7 @@ class ActionBrief
         );
 
         $message = [
-            'to' => $_ENV['FEEDBACK_EMAIL'],
+            'to' => $_ENV['BRIEF_EMAIL'],
             'subject' => 'Добавлена новая заявка',
             'html' => $content
         ];
@@ -52,11 +52,11 @@ class ActionBrief
     {
         $content = sprintf(
             "<b>В форму рекламы добавлена заявка #%d:</b>\n%s",
-            $data->id, $_ENV['REQUESTS_UR'] . $data->path
+            $data->id, $_ENV['REQUESTS_URL'] . $data->path
         );
 
         $message = [
-            'chat_id' => $_ENV['FEEDBACK_CHAT'],
+            'chat_id' => $_ENV['BRIEF_CHAT'],
             'text' => $content
         ];
 
