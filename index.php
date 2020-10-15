@@ -31,7 +31,7 @@ $dotenv->load();
 /**
  * Remap default errors
  */
-Flight::map('error', function (Exception $e) {
+Flight::map('erro', function (Exception $e) {
     Flight::json(['success' => false, 'message' => 'Неизвестная ошибка сервера'], 500);
     exit;
 });
@@ -48,10 +48,10 @@ Flight::map('output', function($message, $code = 500, $success = false) {
 
 
 /**
- * Send to telegram and email feedback single field
+ * Send to telegram and email callback single field
  */
-Flight::route('POST /feedback', [
-    'ActionFeedback', 'start_action'
+Flight::route('POST /callback', [
+    'ActionCallback', 'start_action'
 ], true);
 
 

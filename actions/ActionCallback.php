@@ -1,11 +1,11 @@
 <?php
 /**
- * Feedback request action
+ * Callback request action
  *
  * @since 1.0.0
  */
 
-class ActionFeedback
+class ActionCallback
 {
     /**
      * Check request nonce
@@ -36,7 +36,7 @@ class ActionFeedback
         );
 
         $message = [
-            'to' => $_ENV['FEEDBACK_EMAIL'],
+            'to' => $_ENV['CALLBACK_EMAIL'],
             'subject' => 'Добавлена новая заявка',
             'html' => $content
         ];
@@ -55,7 +55,7 @@ class ActionFeedback
         );
 
         $message = [
-            'chat_id' => $_ENV['FEEDBACK_CHAT'],
+            'chat_id' => $_ENV['CALLBACK_CHAT'],
             'text' => $content
         ];
 
