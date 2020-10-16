@@ -31,17 +31,25 @@ class ActionCallback
     private static function send_email($data)
     {
         $content = sprintf(
-            '<b>Запрос обратной связи: </b><br><a href="mailto:%1$s">%1$s</a>',
+            '<b>Необходимо связаться с клиентом по адресу: </b><br><a href="mailto:%1$s">%1$s</a>',
             htmlspecialchars($data->email)
         );
 
-        $message = [
-            'to' => $_ENV['CALLBACK_EMAIL'],
-            'subject' => 'Добавлена новая заявка',
-            'html' => $content
-        ];
+        $emails = [];
 
-        HelperMailgun::send_message($message);
+        if (isset($_ENV['CALLBACK_EMAIL'])) {
+            $emails = explode(',', $_ENV['CALLBACK_EMAIL']);
+        }
+
+        foreach ($emails as $email) {
+            $message = [
+                'to' => $email,
+                'subject' => 'Запрос обратной связи',
+                'html' => $content
+            ];
+
+            HelperMailgun::send_message($message);
+        }
     }
 
 
@@ -54,12 +62,14 @@ class ActionCallback
             "<b>Запрос обратной связи: </b>\n%s", htmlspecialchars($data->email)
         );
 
-        $message = [
-            'chat_id' => $_ENV['CALLBACK_CHAT'],
-            'text' => $content
-        ];
+        if (isset($_ENV['CALLBACK_CHAT'])) {
+            $message = [
+                'chat_id' => $_ENV['CALLBACK_CHAT'],
+                'text' => $content
+            ];
 
-        HelperTelegram::send_message($message);
+            HelperTelegram::send_message($message);
+        }
     }
 
 

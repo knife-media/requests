@@ -35,13 +35,21 @@ class ActionBrief
             $data->id, $_ENV['REQUESTS_URL'] . $data->path
         );
 
-        $message = [
-            'to' => $_ENV['BRIEF_EMAIL'],
-            'subject' => 'Добавлена новая заявка',
-            'html' => $content
-        ];
+        $emails = [];
 
-        HelperMailgun::send_message($message);
+        if (isset($_ENV['BRIEF_EMAIL'])) {
+            $emails = explode(',', $_ENV['BRIEF_EMAIL']);
+        }
+
+        foreach ($emails as $email) {
+            $message = [
+                'to' => $email,
+                'subject' => 'Добавлена новая заявка #' . $data->id,
+                'html' => $content
+            ];
+
+            HelperMailgun::send_message($message);
+        }
     }
 
 
@@ -55,12 +63,14 @@ class ActionBrief
             $data->id, $_ENV['REQUESTS_URL'] . $data->path
         );
 
-        $message = [
-            'chat_id' => $_ENV['BRIEF_CHAT'],
-            'text' => $content
-        ];
+        if (isset($_ENV['BRIEF_CHAT'])) {
+            $message = [
+                'chat_id' => $_ENV['BRIEF_CHAT'],
+                'text' => $content
+            ];
 
-        HelperTelegram::send_message($message);
+            HelperTelegram::send_message($message);
+        }
     }
 
 
@@ -69,28 +79,28 @@ class ActionBrief
      */
     private static function update_id($root, $id = 1)
     {
-        $args = new stdClass();
+        $redis = new Redis();
 
-        // Get json from options
-        $json = @file_get_contents($root . '/storage/options.json');
-
-        if ($json !== false) {
-            $args = json_decode($json, false);
+        if (!isset($_ENV['REDIS_HOST'], $_ENV['REDIS_PREFIX'])) {
+            return $id;
         }
 
-        if (isset($args->brief)) {
-            $id = $args->brief + 1;
+        $redis->connect($_ENV['REDIS_HOST']);
+
+        // Get brief value
+        $brief = $redis->get($_ENV['REDIS_PREFIX'] . 'brief');
+
+        if ($brief === false) {
+            $brief = $id;
+
+            // Set new brief value if not exists
+            $redis->set($_ENV['REDIS_PREFIX'] . 'brief', $brief);
         }
 
-        $args->brief = $id;
+        // Increment brief option
+        $redis->incr($_ENV['REDIS_PREFIX'] . 'brief');
 
-        // Make new json
-        $json = json_encode($args);
-
-        // Save updated options
-        file_put_contents($root . '/storage/options.json', $json);
-
-        return $id;
+        return $brief;
     }
 
 
@@ -145,7 +155,7 @@ class ActionBrief
         self::send_telegram($data);
 
         // Send message to Email
-        self::send_email($data);
+//        self::send_email($data);
 
         // Successfully exit
         Flight::output('Сообщение успешно отправлено', 200, true);
