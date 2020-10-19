@@ -45,7 +45,8 @@ class ActionMistype
         if (isset($_ENV['MISTYPE_CHAT'])) {
             $message = [
                 'chat_id' => $_ENV['MISTYPE_CHAT'],
-                'text' => implode("\n\n", $content)
+                'text' => implode("\n\n", $content),
+                'disable_web_page_preview' => true
             ];
 
             HelperTelegram::send_message($message);
