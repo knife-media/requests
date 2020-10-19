@@ -64,6 +64,14 @@ Flight::route('POST /brief', [
 
 
 /**
+ * Send to telegram mistype error
+ */
+Flight::route('POST /mistype', [
+    'ActionMistype', 'start_action'
+], true);
+
+
+/**
  * Start application with Flight
  */
 Flight::start();
