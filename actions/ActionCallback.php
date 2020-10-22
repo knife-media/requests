@@ -89,7 +89,7 @@ class ActionCallback
         }
 
         if (empty($data->email)) {
-            return Flight::output('Поле email не может быть пустым', 401);
+            return Flight::output('Поле email не может быть пустым', 400);
         }
 
         // Send message to Telegram

@@ -154,7 +154,7 @@ class ActionBrief
         }
 
         if (empty($data->fields)) {
-            return Flight::output('Поле fields не может быть пустым', 401);
+            return Flight::output('Поле fields не может быть пустым', 400);
         }
 
         $data = self::save_request($data);

@@ -30,9 +30,11 @@ class ActionClub
      */
     private static function send_telegram($data)
     {
-        $content = sprintf(
-            "<b>В форму рекламы добавлена заявка #%d:</b>\n%s",
-            $data->id, $_ENV['REQUESTS_URL'] . $data->path
+        $content = sprintf("%s\n\n%s \n%s \n\n%s",
+            sprintf('<strong>В клуб добавлена новая заявка #%d</strong>', $data->id),
+            sprintf('Автор: %s', htmlspecialchars($data->name)),
+            sprintf('Тема: %s', htmlspecialchars($data->subject)),
+            $_ENV['REQUESTS_URL'] . $data->path
         );
 
         if (isset($_ENV['CLUB_CHAT'])) {
@@ -125,8 +127,16 @@ class ActionClub
             return Flight::output('Ошибка проверки токена безопасности', 403);
         }
 
-        if (empty($data->fields)) {
-            return Flight::output('Поле fields не может быть пустым', 401);
+        if (empty($data->name)) {
+            return Flight::output('Поле имени не может быть пустым', 400);
+        }
+
+        if (empty($data->email)) {
+            return Flight::output('Поле почты не может быть пустым', 400);
+        }
+
+        if (empty($data->subject)) {
+            return Flight::output('Поле темы не может быть пустым', 400);
         }
 
         $data = self::save_request($data);

@@ -67,27 +67,22 @@
 
             <header>
                 <?php
-                    for ($i = 0; $i < count($data->fields); $i++) {
-                        $field = $data->fields[$i];
+                    printf(
+                        '<strong>Имя, род занятий:</strong> <span>%s</span>', htmlspecialchars($data->name)
+                    );
 
-                        // Break on last field
-                        if (count($data->fields) === $i + 1) {
-                            break;
-                        }
+                    printf(
+                        '<strong>E-mail:</strong> <span>%s</span>', htmlspecialchars($data->email)
+                    );
 
-                        printf(
-                            '<strong>%s</strong>', htmlspecialchars($field['label'])
-                        );
-
-                        printf(
-                            '<span>%s</span>', htmlspecialchars($field['value'])
-                        );
-                    }
+                    printf(
+                        '<strong>Тема:</strong> <span>%s</span>', htmlspecialchars($data->subject)
+                    );
                 ?>
             </header>
 
             <article>
-                <?php echo nl2br($field['value']); ?>
+                <?php echo nl2br($data->text); ?>
             </article>
         </section>
     </body>
