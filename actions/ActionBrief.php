@@ -43,7 +43,7 @@ class ActionBrief
 
         foreach ($emails as $email) {
             $message = [
-                'to' => $email,
+                'to' => trim($email),
                 'subject' => 'Добавлена новая заявка #' . $data->id,
                 'html' => $content
             ];
@@ -155,7 +155,7 @@ class ActionBrief
         self::send_telegram($data);
 
         // Send message to Email
-//        self::send_email($data);
+        self::send_email($data);
 
         // Successfully exit
         Flight::output('Сообщение успешно отправлено', 200, true);

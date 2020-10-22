@@ -43,7 +43,7 @@ class ActionCallback
 
         foreach ($emails as $email) {
             $message = [
-                'to' => $email,
+                'to' => trim($email),
                 'subject' => 'Запрос обратной связи',
                 'html' => $content
             ];
