@@ -1,11 +1,11 @@
 <?php
 /**
- * Brief request action
+ * Club request action
  *
- * @since 1.0.0
+ * @since 1.1.0
  */
 
-class ActionBrief
+class ActionClub
 {
     /**
      * Check request nonce
@@ -26,34 +26,6 @@ class ActionBrief
 
 
     /**
-     * Create message and send email using helper
-     */
-    private static function send_email($data)
-    {
-        $content = sprintf(
-            '<b>В форму рекламы добавлена заявка #%1$d:</b><br><a href="%2$s">%2$s</a>',
-            $data->id, $_ENV['REQUESTS_URL'] . $data->path
-        );
-
-        $emails = [];
-
-        if (isset($_ENV['BRIEF_EMAIL'])) {
-            $emails = explode(',', $_ENV['BRIEF_EMAIL']);
-        }
-
-        foreach ($emails as $email) {
-            $message = [
-                'to' => trim($email),
-                'subject' => 'Добавлена новая заявка #' . $data->id,
-                'html' => $content
-            ];
-
-            HelperMailgun::send_message($message);
-        }
-    }
-
-
-    /**
      * Create message and send telegram message using helper
      */
     private static function send_telegram($data)
@@ -63,9 +35,9 @@ class ActionBrief
             $data->id, $_ENV['REQUESTS_URL'] . $data->path
         );
 
-        if (isset($_ENV['BRIEF_CHAT'])) {
+        if (isset($_ENV['CLUB_CHAT'])) {
             $message = [
-                'chat_id' => $_ENV['BRIEF_CHAT'],
+                'chat_id' => $_ENV['CLUB_CHAT'],
                 'text' => $content
             ];
 
@@ -75,7 +47,7 @@ class ActionBrief
 
 
     /**
-     * Update brief id in options
+     * Update club id in options
      */
     private static function update_id($root, $id = 1)
     {
@@ -87,20 +59,20 @@ class ActionBrief
 
         $redis->connect($_ENV['REDIS_HOST']);
 
-        // Redis name
-        $name = $_ENV['REDIS_PREFIX'] . 'brief';
+        // Club redis name
+        $name = $_ENV['REDIS_PREFIX'] . 'club';
 
-        // Get value
+        // Get club value
         $value = $redis->get($name);
 
         if ($value == false) {
             $value = $id;
 
-            // Set new value if not exists
+            // Set new club value if not exists
             $redis->set($name, $value);
         }
 
-        // Increment option
+        // Increment club option
         $redis->incr($name);
 
         return $value;
@@ -118,8 +90,8 @@ class ActionBrief
 
         $secret = substr(md5(uniqid()), -8);
 
-        // Make storage brief file
-        $data->path = sprintf("/storage/brief/%d-%s.html", $data->id, $secret);
+        // Make storage club file
+        $data->path = sprintf("/storage/club/%d-%s.html", $data->id, $secret);
 
         // Create directory if not exists
         if (!is_dir($root . '/storage/club')) {
@@ -128,8 +100,8 @@ class ActionBrief
 
         ob_start();
 
-        // Find brief template
-        include_once($root . '/templates/brief.php');
+        // Find club template
+        include_once($root . '/templates/club.php');
 
         $content = ob_get_clean();
         file_put_contents($root . $data->path, $content);
@@ -161,9 +133,6 @@ class ActionBrief
 
         // Send message to Telegram
         self::send_telegram($data);
-
-        // Send message to Email
-        self::send_email($data);
 
         // Successfully exit
         Flight::output('Сообщение успешно отправлено', 200, true);

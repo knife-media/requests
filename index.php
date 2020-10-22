@@ -2,7 +2,7 @@
 /**
  * Send messages service
  *
- * @version 1.0.0
+ * @version 1.1.0
  */
 
 require_once(__DIR__ . '/vendor/autoload.php');
@@ -31,7 +31,7 @@ $dotenv->load();
 /**
  * Remap default errors
  */
-Flight::map('erro', function (Exception $e) {
+Flight::map('error', function (Exception $e) {
     Flight::json(['success' => false, 'message' => 'Неизвестная ошибка сервера'], 500);
     exit;
 });
@@ -68,6 +68,14 @@ Flight::route('POST /brief', [
  */
 Flight::route('POST /mistype', [
     'ActionMistype', 'start_action'
+], true);
+
+
+/**
+ * Send to telegram club form
+ */
+Flight::route('POST /club', [
+    'ActionClub', 'start_action'
 ], true);
 
 
