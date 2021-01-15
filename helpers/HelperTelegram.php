@@ -23,7 +23,7 @@ class HelperTelegram
         $url = self::$api . $_ENV['TELEGRAM_TOKEN'] . "/sendMessage?";
 
         // Try to send message
-        $result = file_get_contents($url . http_build_query($message));
+        $result = @file_get_contents($url . http_build_query($message));
 
         return $result;
     }

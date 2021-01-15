@@ -80,6 +80,14 @@ Flight::route('POST /club', [
 
 
 /**
+ * Send to telegram Social Planner errors
+ */
+Flight::route('POST /planner', [
+    'ActionPlanner', 'start_action'
+], true);
+
+
+/**
  * Start application with Flight
  */
 Flight::start();
