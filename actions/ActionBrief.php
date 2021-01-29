@@ -122,8 +122,8 @@ class ActionBrief
         $data->path = sprintf("/storage/brief/%d-%s.html", $data->id, $secret);
 
         // Create directory if not exists
-        if (!is_dir($root . '/storage/club')) {
-            mkdir($root . '/storage/club');
+        if (!is_dir($root . '/storage/brief')) {
+            mkdir($root . '/storage/brief');
         }
 
         ob_start();
