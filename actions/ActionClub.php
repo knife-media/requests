@@ -43,7 +43,7 @@ class ActionClub
                 'text' => $content
             ];
 
-            HelperTelegram::send_message($message);
+            SenderTelegram::send_message($message);
         }
     }
 

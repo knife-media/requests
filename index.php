@@ -2,17 +2,17 @@
 /**
  * Send messages service
  *
- * @version 1.1.0
+ * @version 1.1.1
  */
 
 require_once(__DIR__ . '/vendor/autoload.php');
 
 
 /**
- * Autoload actions and helpers
+ * Autoload actions and senders
  */
 Flight::path(__DIR__ . '/actions/');
-Flight::path(__DIR__ . '/helpers/');
+Flight::path(__DIR__ . '/senders/');
 
 
 /**

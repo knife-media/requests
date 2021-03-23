@@ -48,7 +48,7 @@ class ActionBrief
                 'html' => $content
             ];
 
-            HelperMailgun::send_message($message);
+            SenderMailgun::send_message($message);
         }
     }
 
@@ -69,7 +69,7 @@ class ActionBrief
                 'text' => $content
             ];
 
-            HelperTelegram::send_message($message);
+            SenderTelegram::send_message($message);
         }
     }
 

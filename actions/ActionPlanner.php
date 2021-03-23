@@ -48,7 +48,7 @@ class ActionPlanner
                 'disable_web_page_preview' => true
             ];
 
-            HelperTelegram::send_message($message);
+            SenderTelegram::send_message($message);
         }
     }
 

@@ -1,11 +1,11 @@
 <?php
 /**
- * Helper to send message to Email using Mailgun API
+ * Send message to Email using Mailgun API
  *
  * @since 1.0.0
  */
 
-class HelperMailgun
+class SenderMailgun
 {
     private static $api = 'https://api.eu.mailgun.net/v3/';
 

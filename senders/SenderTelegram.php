@@ -1,11 +1,11 @@
 <?php
 /**
- * Helper to send message to Telegram
+ * Send message to Telegram
  *
  * @since 1.0.0
  */
 
-class HelperTelegram
+class SenderTelegram
 {
     private static $api = 'https://api.telegram.org/bot';
 
