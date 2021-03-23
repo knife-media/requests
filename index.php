@@ -64,6 +64,14 @@ Flight::route('POST /brief', [
 
 
 /**
+ * Save list of vacancy fields to file and send its link
+ */
+Flight::route('POST /vacancy', [
+    'ActionVacancy', 'start_action'
+], true);
+
+
+/**
  * Send to telegram mistype error
  */
 Flight::route('POST /mistype', [
