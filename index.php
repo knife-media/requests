@@ -2,7 +2,7 @@
 /**
  * Send messages service
  *
- * @version 1.1.1
+ * @version 1.1.2
  */
 
 require_once(__DIR__ . '/vendor/autoload.php');
@@ -32,17 +32,17 @@ $dotenv->load();
  * Remap default errors
  */
 Flight::map('error', function (Exception $e) {
-    Flight::json(['success' => false, 'message' => 'Неизвестная ошибка сервера'], 500);
+    Flight::json(['success' => false, 'message' => 'Неизвестная ошибка сервера'], 500, true, 'utf-8', JSON_UNESCAPED_UNICODE);
     exit;
 });
 
 Flight::map('notFound', function () {
-    Flight::json(['success' => false, 'message' => 'Метод не найден'], 404);
+    Flight::json(['success' => false, 'message' => 'Метод не найден'], 404, true, 'utf-8', JSON_UNESCAPED_UNICODE);
     exit;
 });
 
 Flight::map('output', function($message, $code = 500, $success = false) {
-    Flight::json(['success' => $success, 'message' => $message], $code);
+    Flight::json(['success' => $success, 'message' => $message], $code, true, 'utf-8', JSON_UNESCAPED_UNICODE);
     exit;
 });
 
@@ -92,6 +92,14 @@ Flight::route('POST /club', [
  */
 Flight::route('POST /planner', [
     'ActionPlanner', 'start_action'
+], true);
+
+
+/**
+ * Send to telegram forgotten Social Planner news
+ */
+Flight::route('POST /news', [
+    'ActionNews', 'start_action'
 ], true);
 
 
