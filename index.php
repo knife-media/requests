@@ -2,11 +2,10 @@
 /**
  * Send messages service
  *
- * @version 1.1.2
+ * @version 1.1.3
  */
 
 require_once(__DIR__ . '/vendor/autoload.php');
-
 
 /**
  * Autoload actions and senders
@@ -14,19 +13,16 @@ require_once(__DIR__ . '/vendor/autoload.php');
 Flight::path(__DIR__ . '/actions/');
 Flight::path(__DIR__ . '/senders/');
 
-
 /**
  * Set root path variable
  */
 Flight::set('config.root_path', __DIR__);
-
 
 /**
  * Try to load dotenv config
  */
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
 $dotenv->load();
-
 
 /**
  * Remap default errors
@@ -45,7 +41,6 @@ Flight::map('output', function($message, $code = 500, $success = false) {
     Flight::json(['success' => $success, 'message' => $message], $code, true, 'utf-8', JSON_UNESCAPED_UNICODE);
     exit;
 });
-
 
 /**
  * Send to telegram and email callback single field
@@ -70,14 +65,12 @@ Flight::route('POST /vacancy', [
     'ActionVacancy', 'start_action'
 ], true);
 
-
 /**
  * Send to telegram mistype error
  */
 Flight::route('POST /mistype', [
     'ActionMistype', 'start_action'
 ], true);
-
 
 /**
  * Send to telegram club form
@@ -86,14 +79,12 @@ Flight::route('POST /club', [
     'ActionClub', 'start_action'
 ], true);
 
-
 /**
  * Send to telegram Social Planner errors
  */
 Flight::route('POST /planner', [
     'ActionPlanner', 'start_action'
 ], true);
-
 
 /**
  * Send to telegram forgotten Social Planner news
@@ -102,6 +93,12 @@ Flight::route('POST /news', [
     'ActionNews', 'start_action'
 ], true);
 
+/**
+ * Send to telegram posts with `russia` tag
+ */
+Flight::route('POST /russia', [
+    'ActionRussia', 'start_action'
+], true);
 
 /**
  * Start application with Flight
