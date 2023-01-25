@@ -30,8 +30,9 @@ class ActionRussia
      */
     private static function send_telegram($data)
     {
-        $content = "<strong>Опубликована запись с меткой «Россия»</strong>\n";
+        $data->title = strip_tags($data->title);
 
+        $content = "<strong>{$data->title}</strong>\n";
         $content = $content . $data->link . "\n\n";
         $content = $content . "Ссылки на посты в соцсетях:\n";
 
@@ -70,8 +71,8 @@ class ActionRussia
             return Flight::output('Ошибка проверки токена безопасности', 403);
         }
 
-         if (!isset($data->link)) {
-            return Flight::output('Поле link не может быть пустым', 401);
+        if (!isset($data->link, $data->title)) {
+            return Flight::output('Не заполнены необходимые поля', 400);
         }
 
         // Send message to Telegram
