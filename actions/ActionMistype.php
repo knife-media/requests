@@ -42,6 +42,11 @@ class ActionMistype
             $content[] = $data->location;
         }
 
+        // Add ip address
+        if (!empty($_SERVER['HTTP_X_REAL_IP'])) {
+            $content[] = '<em>Пользователь: ' . $_SERVER['HTTP_X_REAL_IP'] . '</em>';
+        }
+
         if (isset($_ENV['MISTYPE_CHAT'])) {
             $message = [
                 'chat_id' => $_ENV['MISTYPE_CHAT'],
