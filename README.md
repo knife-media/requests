@@ -1,4 +1,4 @@
-# Frontend requests manager for knife.media
+# Backend requests manager for knife.media
 
 Backend service for manage and dispatch messages from knife.media. Typical use case is sending form results to administrator email.
 
