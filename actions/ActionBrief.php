@@ -77,33 +77,26 @@ class ActionBrief
     /**
      * Update brief id in options
      */
-    private static function update_id($root, $id = 1)
+    private static function update_id($root, $meta = 'brief')
     {
-        $redis = new Redis();
+        $db = new PDO("mysql:host={$_ENV['DB_HOST']};dbname={$_ENV['DB_NAME']};charset=utf8", $_ENV['DB_USER'], $_ENV['DB_PASSWORD']);
 
-        if (!isset($_ENV['REDIS_HOST'], $_ENV['REDIS_PREFIX'])) {
-            return $id;
+        $select = $db->prepare("SELECT value FROM options WHERE meta = '{$meta}'");
+        $select->execute();
+
+        $result = $select->fetch(PDO::FETCH_OBJ);
+
+        if (empty($result)) {
+            $insert = $db->prepare("INSERT INTO options (meta, value) VALUES ('{$meta}', 1)");
+            $insert->execute();
+
+            return 1;
         }
 
-        $redis->connect($_ENV['REDIS_HOST']);
+        $update = $db->prepare("UPDATE options SET value = value + 1 WHERE meta = '{$meta}'");
+        $update->execute();
 
-        // Redis name
-        $name = $_ENV['REDIS_PREFIX'] . 'brief';
-
-        // Get value
-        $value = $redis->get($name);
-
-        if ($value == false) {
-            $value = $id;
-
-            // Set new value if not exists
-            $redis->set($name, $value);
-        }
-
-        // Increment option
-        $redis->incr($name);
-
-        return $value;
+        return $result->value;
     }
 
 
@@ -116,10 +109,8 @@ class ActionBrief
         // Get id from options
         $data->id = self::update_id($root);
 
-        $secret = substr(md5(uniqid()), -8);
-
         // Make storage brief file
-        $data->path = sprintf("/storage/brief/%d-%s.html", $data->id, $secret);
+        $data->path = sprintf("/storage/brief/%d-%s.html", $data->id, substr(md5(uniqid()), -8));
 
         // Create directory if not exists
         if (!is_dir($root . '/storage/brief')) {
