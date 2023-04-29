@@ -37,6 +37,11 @@ class ActionMistype
             $content[] = "<strong>Комментарий</strong>\n" . $data->comment;
         }
 
+        // Add context
+        if (!empty($data->context)) {
+            $content[] = "<strong>Абзац</strong>\n" . $data->context;
+        }
+
         // Add location
         if (!empty($data->location)) {
             $content[] = $data->location;
